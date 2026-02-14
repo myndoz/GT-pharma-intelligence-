@@ -86,26 +86,6 @@ body { background-color:#f4faf4; }
 
 st.markdown('<div class="header">💊 GT Pharma Intelligence</div>', unsafe_allow_html=True)
 
-# ========================= AUTO REFRESH =========================
-def should_refresh():
-    return time.time() - st.session_state.last_scan > 1800
-
-def scan_pharma_news():
-    ist = pytz.timezone("Asia/Kolkata")
-    now = datetime.now(ist).strftime("%H:%M IST")
-
-    sample_news = [
-        f"{now} - FDA approvals increasing globally",
-        f"{now} - AI drug discovery investments rising",
-        f"{now} - Pharma M&A activity accelerating"
-    ]
-
-    st.session_state.news_feed = sample_news
-    st.session_state.last_scan = time.time()
-
-if should_refresh():
-    scan_pharma_news()
-
 # ========================= NEWS SECTION =========================
 st.subheader("📡 Live Pharma Alerts")
 
