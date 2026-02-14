@@ -1,5 +1,8 @@
 streamlit
-openai>=1.0.0
 requests
 feedparser
+openai>=1.0.0
 beautifulsoup4
+lxml
+pytz
+schedule
