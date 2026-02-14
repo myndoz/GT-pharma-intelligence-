@@ -1,67 +1,72 @@
 import streamlit as st
-import requests
 
-st.set_page_config(page_title="Pharma Intelligence Auditor Assistant")
+st.set_page_config(
+    page_title="Pharma Auditor AI",
+    page_icon="💊",
+    layout="centered"
+)
 
-st.title("💊 Pharma Intelligence & Auditor Research Assistant")
+# Mobile CSS
+st.markdown("""
+<style>
+.block-container {
+    padding-top: 1rem;
+    padding-bottom: 6rem;
+}
+.stButton>button {
+    width:100%;
+    height:60px;
+    border-radius:18px;
+    font-size:18px;
+    font-weight:600;
+}
+.card {
+    padding:18px;
+    border-radius:18px;
+    background:#f7f9fc;
+    margin-bottom:12px;
+    box-shadow:0px 2px 8px rgba(0,0,0,0.08);
+}
+.big-title {
+    font-size:28px;
+    font-weight:800;
+    text-align:center;
+    margin-bottom:10px;
+}
+.subtitle {
+    text-align:center;
+    color:gray;
+    margin-bottom:25px;
+}
+</style>
+""", unsafe_allow_html=True)
 
-st.write("Welcome! This system will scan global pharma news and help auditors prepare for client discussions.")
+st.markdown("<div class='big-title'>💊 Pharma Auditor AI</div>", unsafe_allow_html=True)
+st.markdown("<div class='subtitle'>Grand Thornton Intelligent Assistant</div>", unsafe_allow_html=True)
 
-# -------------------------------
-# NEWS SECTION
-# -------------------------------
+tab1, tab2, tab3, tab4 = st.tabs([
+    "📰 News Alerts",
+    "🚨 Fraud Radar",
+    "🏢 Company Research",
+    "🎯 CEO Talking Points"
+])
 
-def fetch_news():
-    url = "https://newsapi.org/v2/everything?q=pharmaceutical OR pharma OR FDA OR drug industry&language=en&sortBy=publishedAt&pageSize=5&apiKey=demo"
-    try:
-        response = requests.get(url)
-        data = response.json()
-        return data.get("articles", [])
-    except:
-        return []
+with tab1:
+    st.markdown("### Global Pharma Intelligence")
+    if st.button("Scan Worldwide Pharma News"):
+        st.info("AI will scan global industry updates here")
 
-st.header("🌍 Latest Pharma News")
+with tab2:
+    st.markdown("### Risk & Fraud Detection")
+    if st.button("Check Fraud Signals"):
+        st.warning("AI will detect compliance & fraud alerts")
 
-if st.button("Scan Global Pharma News"):
-    articles = fetch_news()
-    if not articles:
-        st.warning("News API will be connected later. App working correctly.")
-    else:
-        for a in articles:
-            st.subheader(a["title"])
-            st.write(a["description"])
-            st.write("---")
+with tab3:
+    company = st.text_input("Enter Client Company Name")
+    if st.button("Deep Research Company"):
+        st.success("AI will prepare auditor briefing")
 
-# -------------------------------
-# COMPANY RESEARCH
-# -------------------------------
-
-st.header("🧠 Auditor Smart Discussion Builder")
-
-company = st.text_input("Enter Client Company Name")
-
-if st.button("Generate Meeting Intelligence"):
-    if company:
-        st.markdown(f"""
-### Strategic Talking Points for {company}
-
-**Possible CEO Questions**
-- How is the global pharma market shifting?
-- What risks affect our valuation?
-- Regulatory exposure areas?
-- Expansion opportunities?
-
-**Auditor Smart Opinions**
-- Focus on compliance strength
-- Highlight R&D positioning
-- Discuss global competition
-- Mention investor confidence factors
-
-**Red Flag Areas to Check**
-- Related party transactions
-- Regulatory notices
-- Revenue recognition
-- Export dependency
-""")
-    else:
-        st.warning("Please enter company name")
+with tab4:
+    topic = st.text_input("Enter discussion topic (valuation, risk, expansion...)")
+    if st.button("Generate CEO Talking Points"):
+        st.success("AI will generate strategic discussion guidance")
