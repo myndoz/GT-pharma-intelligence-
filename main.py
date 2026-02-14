@@ -1,6 +1,20 @@
 import streamlit as st
 import time
 from datetime import datetime
+# ---- PWA MOBILE INSTALL SUPPORT ----
+import streamlit as st
+
+st.set_page_config(
+    page_title="GT Pharma Intelligence",
+    page_icon="static/favicon.png",
+    layout="wide"
+)
+
+st.markdown("""
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#f97316">
+<link rel="apple-touch-icon" href="/static/icon-192.png">
+""", unsafe_allow_html=True)
 
 # ---------------- CONFIG ----------------
 st.set_page_config(page_title="Pharma Intelligence", layout="centered")
