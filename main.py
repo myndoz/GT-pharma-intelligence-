@@ -71,6 +71,38 @@ st.markdown("""
     border-radius:15px;
     font-size:18px;
 }
+/* FORCE ALL TEXT WHITE */
+html, body, [class*="css"]  {
+    color: white !important;
+}
+
+/* Labels */
+label, .stTextInput label {
+    color: white !important;
+    font-size:18px !important;
+    font-weight:600;
+}
+
+/* Subheaders */
+h1, h2, h3, h4, h5 {
+    color: white !important;
+}
+
+/* Placeholder text */
+input::placeholder {
+    color: #ddd !important;
+}
+
+/* Tab text */
+button[data-baseweb="tab"] {
+    color: white !important;
+    font-weight:700 !important;
+}
+
+/* Info/Success boxes */
+.stAlert {
+    color:white !important;
+}
 
 </style>
 """, unsafe_allow_html=True)
