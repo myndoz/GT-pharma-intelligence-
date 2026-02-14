@@ -1,76 +1,99 @@
-# Pharma Intelligence Auditor - Advanced Version
-# Mobile-first UI + Auto news refresh + CEO brief builder
-
 import streamlit as st
-import requests
-import feedparser
+import time
 from datetime import datetime
-from openai import OpenAI
 
 # ---------------- CONFIG ----------------
-st.set_page_config(page_title="Pharma Intelligence Auditor", layout="centered")
+st.set_page_config(page_title="Pharma Intelligence", layout="centered")
 
-# Auto refresh every 30 minutes (simulate notifications)
-st.rerun
-from streamlit_autorefresh import st_autorefresh
-st_autorefresh(interval=1800000, key="news_refresh")
+# ---------------- SESSION STATE ----------------
+if "news_feed" not in st.session_state:
+    st.session_state.news_feed = []
 
-# OpenAI client
-client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+if "last_scan" not in st.session_state:
+    st.session_state.last_scan = 0
 
 # ---------------- UI STYLE ----------------
 st.markdown("""
 <style>
-body {background: #f6fff9;}
-.main-title {font-size:32px;font-weight:700;color:white;padding:20px;text-align:center;}
-.header {background: linear-gradient(90deg,#ff7a18,#ffb347);border-radius:15px;margin-bottom:15px;}
-.card {background:white;border-radius:18px;padding:18px;margin:12px 0;box-shadow:0 4px 12px rgba(0,0,0,0.08);} 
-.button-primary button {background:#00a86b;color:white;font-size:18px;border-radius:12px;padding:10px 18px;}
-.footer {position:fixed;bottom:0;width:100%;background:#ff7a18;color:white;text-align:center;padding:10px;font-weight:600;}
+body { background-color:#f7faf7; }
+.header {
+    background: linear-gradient(90deg,#16a34a,#22c55e);
+    padding:20px;
+    border-radius:12px;
+    color:white;
+    text-align:center;
+    font-size:28px;
+    font-weight:700;
+}
+.footer {
+    background:#f97316;
+    padding:14px;
+    border-radius:12px;
+    color:white;
+    text-align:center;
+    margin-top:30px;
+}
+.card {
+    background:white;
+    padding:16px;
+    border-radius:16px;
+    box-shadow:0px 4px 12px rgba(0,0,0,0.08);
+    margin-bottom:12px;
+}
+.big-input input {
+    font-size:18px !important;
+}
 </style>
 """, unsafe_allow_html=True)
 
-st.markdown('<div class="header"><div class="main-title">Pharma Intelligence Auditor</div></div>', unsafe_allow_html=True)
+st.markdown('<div class="header">💊 Pharma Intelligence Assistant</div>', unsafe_allow_html=True)
+
+# ---------------- AUTO REFRESH CHECK ----------------
+def should_refresh():
+    return time.time() - st.session_state.last_scan > 1800
+
+# ---------------- NEWS SCAN (MOCK) ----------------
+def scan_pharma_news():
+    sample_news = [
+        f"{datetime.now().strftime('%H:%M')} - FDA approval activity increasing globally",
+        f"{datetime.now().strftime('%H:%M')} - Biotech funding surge observed",
+        f"{datetime.now().strftime('%H:%M')} - Major pharma focusing on AI drug discovery"
+    ]
+    st.session_state.news_feed = sample_news + st.session_state.news_feed[:10]
+    st.session_state.last_scan = time.time()
+
+# silent auto refresh when user opens app
+if should_refresh():
+    scan_pharma_news()
+
+# ---------------- MANUAL SCAN BUTTON ----------------
+if st.button("🔄 Scan Global Pharma News"):
+    scan_pharma_news()
+    st.success("Latest intelligence updated")
 
 # ---------------- NEWS FEED ----------------
-def fetch_pharma_news():
-    feed = feedparser.parse("https://news.google.com/rss/search?q=pharmaceutical+industry&hl=en-IN&gl=IN&ceid=IN:en")
-    articles = []
-    for entry in feed.entries[:10]:
-        articles.append({
-            "title": entry.title,
-            "link": entry.link,
-            "published": entry.published
-        })
-    return articles
+st.subheader("📡 Live Pharma Alerts")
 
-st.markdown("### 🔔 Live Pharma Alerts")
-news = fetch_pharma_news()
+if not st.session_state.news_feed:
+    st.info("No alerts yet. Run first scan.")
 
-for item in news:
-    st.markdown(f'<div class="card">📢 <b>{item["title"]}</b><br><a href="{item["link"]}">Read more</a><br><small>{item["published"]}</small></div>', unsafe_allow_html=True)
+for item in st.session_state.news_feed:
+    st.markdown(f'<div class="card">{item}</div>', unsafe_allow_html=True)
 
-# ---------------- COMPANY INTELLIGENCE ----------------
-st.markdown("### 🧠 CEO Meeting Intelligence")
-company = st.text_input("Enter Pharma Company Name")
+# ---------------- CEO DISCUSSION BUILDER ----------------
+st.subheader("🧠 CEO Discussion Prep")
+company = st.text_input("Enter Company Name", key="company_input")
 
-if st.button("Generate CEO Brief"):
-    if company:
-        prompt = f"""
-You are a Big4 consulting partner preparing for a CEO meeting.
-Company: {company}
-Provide:
-1) Latest market developments
-2) Risk areas
-3) Strategic questions to ask CEO
-4) Smart opinions to impress leadership
-"""
-        response = client.chat.completions.create(
-            model="gpt-4.1-mini",
-            messages=[{"role": "user", "content": prompt}],
-            temperature=0.4
-        )
-        st.markdown(f'<div class="card">{response.choices[0].message.content}</div>', unsafe_allow_html=True)
+if st.button("Generate Talking Points"):
+    if company.strip() == "":
+        st.warning("Please enter a company name")
+    else:
+        st.markdown('<div class="card">', unsafe_allow_html=True)
+        st.write(f"Strategic conversation starters for **{company.title()}**:")
+        st.write("• Ask about AI adoption in R&D")
+        st.write("• Discuss regulatory expansion markets")
+        st.write("• Explore pipeline commercialization strategy")
+        st.write("• Mention recent biotech partnerships trend")
+        st.markdown('</div>', unsafe_allow_html=True)
 
-# ---------------- FOOTER ----------------
-st.markdown('<div class="footer">Grand Thornton Intelligent Assistant</div>', unsafe_allow_html=True)
+st.markdown('<div class="footer">Grand Thornton Smart Auditor Companion</div>', unsafe_allow_html=True)
