@@ -123,8 +123,7 @@ if audio:
 st.info("Voice received. Processing...")
 
 ```
-# For now we simulate transcription (browser mic gives audio but not text yet)
-voice_query = "Summarize latest pharma industry risks and CEO concerns"
+voice_query = "Give latest risks, opportunities and discussion ideas in pharma industry"
 
 response = client.chat.completions.create(
     model="gpt-4.1-mini",
@@ -136,4 +135,3 @@ st.markdown('<div class="card">', unsafe_allow_html=True)
 st.write(response.choices[0].message.content)
 st.markdown('</div>', unsafe_allow_html=True)
 ```
-
