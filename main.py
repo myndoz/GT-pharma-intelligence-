@@ -124,7 +124,8 @@ if not st.session_state.news_feed:
 for item in st.session_state.news_feed:
     st.markdown(f'<div class="card">{item}</div>', unsafe_allow_html=True)
 
-# ========================= CEO DISCUSSION BUILDER =========================
+# ---------------- CEO MEETING INTELLIGENCE ----------------
+
 st.subheader("🧠 CEO Meeting Intelligence")
 
 company = st.text_input("Enter Pharma Company Name")
@@ -135,26 +136,47 @@ if st.button("Generate AI Briefing"):
         st.warning("Please enter company name")
 
     else:
-        prompt = f"""
-You are a strategy consultant preparing for a CEO meeting with {company}.
+        with st.spinner("Preparing executive intelligence..."):
 
-Provide:
-• Latest industry trends relevant to them
-• Business risks they face
-• Smart discussion topics
-• One impressive question to ask CEO
+            prompt = f"""
+You are a senior strategy consultant preparing a partner before meeting the CEO of {company}.
+
+Create a sharp, concise executive briefing (not generic explanation).
+
+Write in bullet points under these exact headings:
+
+1. Company Situation Right Now
+(What is happening around them in market / pipeline / competition)
+
+2. CEO Likely Priorities
+(What topics CEO probably cares about currently)
+
+3. Strategic Risks to Watch
+(What could worry leadership)
+
+4. Smart Conversation Starters
+(What I can say to impress them)
+
+5. One Brilliant Question to Ask
+(A single high-impact question)
+
+Keep it short, business-like, intelligent and boardroom quality.
+No long paragraphs.
 """
 
-        with st.spinner("Analyzing company intelligence..."):
-            response = client.chat.completions.create(
-                model="gpt-4.1-mini",
-                messages=[{"role": "user", "content": prompt}],
-                temperature=0.4
-            )
+            try:
+                response = client.chat.completions.create(
+                    model="gpt-4.1-mini",
+                    messages=[{"role": "user", "content": prompt}],
+                    temperature=0.3
+                )
 
-        st.markdown('<div class="card">', unsafe_allow_html=True)
-        st.write(response.choices[0].message.content)
-        st.markdown('</div>', unsafe_allow_html=True)
+                st.markdown('<div class="card">', unsafe_allow_html=True)
+                st.write(response.choices[0].message.content)
+                st.markdown('</div>', unsafe_allow_html=True)
+
+            except Exception as e:
+                st.error("AI temporarily unavailable. Check API key in Secrets.")
 
 # ========================= VOICE AI =========================
 st.subheader("🎤 Speak with Pharma AI")
