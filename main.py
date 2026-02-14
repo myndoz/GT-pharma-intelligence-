@@ -1,3 +1,5 @@
+from openai import OpenAI
+from streamlit_mic_recorder import mic_recorder
 import streamlit as st
 import time
 from datetime import datetime
@@ -111,3 +113,27 @@ if st.button("Generate Talking Points"):
         st.markdown('</div>', unsafe_allow_html=True)
 
 st.markdown('<div class="footer">Grand Thornton Smart Auditor Companion</div>', unsafe_allow_html=True)
+# ---------------- VOICE AI ASSISTANT ----------------
+
+st.subheader("🎤 Speak to Pharma AI")
+
+audio = mic_recorder(start_prompt="🎙️ Start Talking", stop_prompt="🛑 Stop")
+
+if audio:
+st.info("Voice received. Processing...")
+
+```
+# For now we simulate transcription (browser mic gives audio but not text yet)
+voice_query = "Summarize latest pharma industry risks and CEO concerns"
+
+response = client.chat.completions.create(
+    model="gpt-4.1-mini",
+    messages=[{"role": "user", "content": voice_query}],
+    temperature=0.5
+)
+
+st.markdown('<div class="card">', unsafe_allow_html=True)
+st.write(response.choices[0].message.content)
+st.markdown('</div>', unsafe_allow_html=True)
+```
+
