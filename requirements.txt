@@ -7,3 +7,7 @@ lxml
 pytz
 schedule
 streamlit-mic-recorder
+feedparser
+requests
+beautifulsoup4
+lxml
