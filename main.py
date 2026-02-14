@@ -11,7 +11,7 @@ from openai import OpenAI
 st.set_page_config(page_title="Pharma Intelligence Auditor", layout="centered")
 
 # Auto refresh every 30 minutes (simulate notifications)
-st.experimental_rerun
+st.rerun
 from streamlit_autorefresh import st_autorefresh
 st_autorefresh(interval=1800000, key="news_refresh")
 
