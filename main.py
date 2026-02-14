@@ -28,10 +28,10 @@ client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 # ---------------- SESSION STATE ----------------
 
 if "news_feed" not in st.session_state:
-st.session_state.news_feed = []
+    st.session_state.news_feed = []
 
 if "last_scan" not in st.session_state:
-st.session_state.last_scan = 0
+    st.session_state.last_scan = 0
 
 # ---------------- UI STYLE ----------------
 
@@ -98,18 +98,18 @@ st.session_state.news_feed = sample_news + st.session_state.news_feed[:10]
 st.session_state.last_scan = time.time()
 
 if should_refresh():
-scan_pharma_news()
+   scan_pharma_news()
 
 # ---------------- NEWS SECTION ----------------
 
 st.subheader("📡 Live Pharma Alerts")
 
 if st.button("🔄 Refresh Intelligence"):
-scan_pharma_news()
-st.success("Latest intelligence updated")
+   scan_pharma_news()
+   st.success("Latest intelligence updated")
 
 if not st.session_state.news_feed:
-st.info("No alerts yet")
+   st.info("No alerts yet")
 
 for item in st.session_state.news_feed:
 st.markdown(f'<div class="card">{item}</div>', unsafe_allow_html=True)
@@ -122,7 +122,7 @@ company = st.text_input("Enter Pharma Company Name")
 
 if st.button("Generate AI Briefing"):
 if company.strip() == "":
-st.warning("Please enter company name")
+   st.warning("Please enter company name")
 else:
 prompt = f"""
 You are a strategy consultant. Prepare a short executive briefing before meeting the CEO of {company}.
@@ -154,7 +154,7 @@ st.subheader("🎤 Speak with Pharma AI")
 audio = mic_recorder(start_prompt="Start Talking", stop_prompt="Stop Recording")
 
 if audio is not None:
-st.info("Voice received. Generating insights...")
+   st.info("Voice received. Generating insights...")
 
 ```
 voice_prompt = """
